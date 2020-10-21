@@ -6,9 +6,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#define QUIZ_TIME 30
+#define QUIZ_TIME 20
 #define INTERVAL 10
-int rem_time = 30;
+int rem_time = 20;
 
 int start_quiz();
 
@@ -45,8 +45,11 @@ int main()
         int proc_exists = kill(quiz, 0);
         if (proc_exists < 0)
         {
-            printf("Child %d exited with status %d\n", quiz, status);
-            return 0;
+            if (WIFEXITED(status))
+            {
+                printf("Child %d exited with status %d\n", quiz, status);
+                return 0;
+            }
         }
 
         int rc = kill(quiz, SIGKILL);
@@ -56,7 +59,7 @@ int main()
             return EXIT_FAILURE;
         }
         wait(&status);
-        if (WIFEXITED(status) || WIFSIGNALED(status))
+        if (WIFSIGNALED(status))
         {
             printf("Child %d killed with status %d\n", quiz, status);
         }
