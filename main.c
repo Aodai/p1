@@ -8,6 +8,7 @@
 
 #define QUIZ_TIME 30
 #define INTERVAL 10
+int rem_time = 30;
 
 int start_quiz();
 
@@ -34,8 +35,9 @@ int main()
         {
             if (waitpid(quiz, &status, WNOHANG) != quiz)
             {
-                sprintf(remain_time, "Time remaining: %d seconds\n", QUIZ_TIME - i * 10);
+                sprintf(remain_time, "Time remaining: %d seconds\n", rem_time);
                 write(STDOUT_FILENO, remain_time, strlen(remain_time));
+                rem_time -= 10;
                 sleep(INTERVAL);
             }
         }
